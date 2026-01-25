@@ -1,4 +1,4 @@
-🏦 Banking Management System – Spring Boot Project
+**🏦 Banking Management System – Spring Boot Project**
 
 📌 About the Project
 
