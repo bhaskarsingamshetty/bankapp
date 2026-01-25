@@ -1,9 +1,37 @@
-FROM eclipse-temurin:17-jre-alpine
-
+# ---------- Build Stage ----------
+FROM maven:3.9.6-eclipse-temurin-17 AS build
 WORKDIR /app
+COPY . .
+RUN mvn clean package -DskipTests
 
-COPY target/*.jar app.jar
+# ---------- Run Stage ----------
+FROM eclipse-temurin:17-jre-alpine
+WORKDIR /app
+COPY --from=build /app/target/*.jar app.jar
 
-EXPOSE 8081
+EXPOSE 8080
 
-ENTRYPOINT ["java","-jar","/app/app.jar"]
+ENTRYPOINT ["java","-jar","app.jar"]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# FROM eclipse-temurin:17-jre-alpine
+
+# WORKDIR /app
+
+# COPY target/*.jar app.jar
+
+# EXPOSE 8081
+
+# ENTRYPOINT ["java","-jar","/app/app.jar"]
