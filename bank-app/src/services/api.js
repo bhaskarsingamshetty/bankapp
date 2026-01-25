@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:8081/api';
+const BASE_URL = 'https://bankapp-66da.onrender.com/api';
 
 const getHeaders = ({ includeAuth = true, contentType = 'application/json' } = {}) => {
     const headers = {
