@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
 
         String path = request.getServletPath();
-        if (path.equals("/api/login") || path.equals("/api/signup") || path.equals("/api/actuator/health")) {
+        if (path.equals("/login") || path.equals("/signup") || path.equals("/health")) {
             filterChain.doFilter(request, response);
             return;
         }

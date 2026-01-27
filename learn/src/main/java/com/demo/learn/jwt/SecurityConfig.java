@@ -33,7 +33,7 @@ public class SecurityConfig {
                 sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS)   
             )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers("/login", "/signup", "/api/actuator/health").permitAll()        
+                    .requestMatchers("/login", "/signup","/health").permitAll()
                     .anyRequest().authenticated()                            
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class); 
