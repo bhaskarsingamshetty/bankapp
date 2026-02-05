@@ -41,11 +41,13 @@ public class AuthService {
         }
         Customer item = repo.findByEmail(data.getEmail());
         if(encoder.matches(data.getPassword(),item.getPassword())){
-            String token = jwtutil.generateToken(data.getEmail());
+            String role = item.getRole();
+            String token = jwtutil.generateToken(data.getEmail(),role);
             return ResponseEntity.ok(Map.of(
                 "message","Login Succesfull",
                 "token",token,
-                "id",item.getId()
+                "id",item.getId(),
+                "role",role
             ));
         }return ResponseEntity.badRequest().body(new ErrorResponse("wrong password"));
     }

@@ -28,8 +28,6 @@ public class AccountController {
         return service.getaccountinfo(id);
     }
 
-    // also add new method to  get type of accounts user have
-
     @GetMapping("/balance/{id}")
     public ResponseEntity<?> getbalance(@PathVariable Long id){
         return service.getbalance(id);

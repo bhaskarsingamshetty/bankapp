@@ -23,4 +23,6 @@ public class Customer {
     // private Long accountnumber;
     @Column(nullable = false)
     private String password;
+
+    private String role;
 }

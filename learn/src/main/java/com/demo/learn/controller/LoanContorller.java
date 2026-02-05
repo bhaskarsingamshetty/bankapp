@@ -27,9 +27,13 @@ public class LoanContorller {
     public ResponseEntity<?> getloans(@PathVariable long id){
         return service.getloan(id);
     }
-    @GetMapping("/getloans")
+    @GetMapping("admin/getloans")
     public ResponseEntity<?> getallloans(){
         return service.getallloans();
+    }
+    @PostMapping("admin/manageloan")
+    public ResponseEntity<?> manageloan(long id,String status){
+        return service.manageloan(id,status);
     }
     
 }

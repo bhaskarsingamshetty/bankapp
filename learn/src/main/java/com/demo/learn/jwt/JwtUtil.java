@@ -13,9 +13,10 @@ public class JwtUtil {
  private final String SECRET = "my_super_secret_jwt_key_1234567890_ABCDE";
 
     
-    public String generateToken(String email){
+    public String generateToken(String email,String role){
         return Jwts.builder()
             .setSubject(email)
+            .claim("role",role)
             .setIssuedAt(new Date())
             .setExpiration(new Date(System.currentTimeMillis()+60*60*1000))
             .signWith(Keys.hmacShaKeyFor(SECRET.getBytes()), SignatureAlgorithm.HS256)
@@ -39,4 +40,13 @@ public class JwtUtil {
 
         return exp.before(new Date());
     }
+    public String extractRole(String token){
+        return Jwts.parserBuilder()
+                .setSigningKey(SECRET.getBytes())
+                .build()
+                .parseClaimsJws(token)
+                .getBody()
+                .get("role", String.class);
+    }
+
 }
