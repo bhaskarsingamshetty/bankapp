@@ -23,7 +23,16 @@ const Login = () => {
             const data = await api.login(formData.email, formData.password);
             localStorage.setItem('authToken', data.token);
             localStorage.setItem('userId', data.id);
-            navigate('/');
+            const normalizedRole = data.role ? data.role.toUpperCase() : '';
+            localStorage.setItem('role', normalizedRole);
+
+            if (normalizedRole === "ADMIN") {
+                console.log(data.role);
+                navigate('/admin/dashboard');
+            } else {
+                console.log(data.role + "user");
+                navigate('/');
+            }
         } catch (err) {
             console.error('Login error:', err);
             setError(err.message || 'Login failed. Please check your credentials.');

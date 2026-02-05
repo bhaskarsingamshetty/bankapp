@@ -76,6 +76,8 @@ const Sidebar = ({ isOpen }) => {
                     }}
                     onClick={() => {
                         localStorage.removeItem('authToken');
+                        localStorage.removeItem('userId');
+                        localStorage.removeItem('role');
                         navigate('/login');
                     }}
                 >

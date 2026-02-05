@@ -13,6 +13,8 @@ import { ToastProvider } from './context/ToastContext';
 import './index.css';
 
 import Account from './pages/Account';
+import AdminDashboard from './pages/admin/AdminDashboard';
+import LoanManagement from './pages/admin/LoanManagement';
 
 function App() {
   return (
@@ -32,6 +34,12 @@ function App() {
               <Route path="my-loans" element={<MyLoans />} />
               <Route path="insurance" element={<Insurance />} />
             </Route>
+          </Route>
+
+          {/* Admin Routes */}
+          <Route element={<ProtectedRoute allowedRoles={['ADMIN']} />}>
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/admin/loans" element={<LoanManagement />} />
           </Route>
         </Routes>
       </BrowserRouter>

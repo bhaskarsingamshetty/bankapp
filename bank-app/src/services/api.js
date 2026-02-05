@@ -1,4 +1,5 @@
-const BASE_URL = 'https://bankapp-66da.onrender.com/api';
+const BASE_URL = 'http://localhost:8081/api';
+// 'https://bankapp-66da.onrender.com/api';
 
 const getHeaders = ({ includeAuth = true, contentType = 'application/json' } = {}) => {
     const headers = {
@@ -67,9 +68,7 @@ export const api = {
     },
 
     getCustomerName: async (userId) => {
-        const response = await fetch(`${BASE_URL}/customername/${userId}`, {
-            headers: getHeaders(),
-        });
+
         const res = await fetch(`${BASE_URL}/customername/${userId}`, {
             headers: getHeaders(),
         });
@@ -117,6 +116,22 @@ export const api = {
 
     getTransactions: async (userId) => {
         const response = await fetch(`${BASE_URL}/transaction/get_transaction/${userId}`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    },
+
+    // Admin Loan Management
+    getAllLoans: async () => {
+        const response = await fetch(`${BASE_URL}/loan/admin/getloans`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    },
+
+    updateLoanStatus: async (loanId, status) => {
+        const response = await fetch(`${BASE_URL}/loan/admin/manageloan?loanId=${loanId}&status=${status}`, {
+            method: 'POST',
             headers: getHeaders(),
         });
         return handleResponse(response);
