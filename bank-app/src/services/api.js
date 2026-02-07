@@ -26,8 +26,6 @@ const handleResponse = async (response) => {
         const errorData = await response.json().catch(() => ({}));
         throw new Error(errorData.message || 'API Request failed');
     }
-
-    // Some endpoints might return empty body on success
     const text = await response.text();
     return text ? JSON.parse(text) : {};
 };
@@ -83,11 +81,27 @@ export const api = {
         return handleResponse(response);
     },
 
+    getAccountBalance: async (userId) => {
+        const response = await fetch(`${BASE_URL}/account/balance/${userId}`, {
+            headers: getHeaders(),
+        });
+        return handleResponse(response);
+    },
+
     createAccount: async (userId, accountData) => {
         const response = await fetch(`${BASE_URL}/account/info/${userId}`, {
             method: 'POST',
             headers: getHeaders(),
             body: JSON.stringify(accountData),
+        });
+        return handleResponse(response);
+    },
+
+    setDefaultAccount: async (userId, accountNumber) => {
+        const response = await fetch(`${BASE_URL}/account/setdefault`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({ id: userId, accid: accountNumber }),
         });
         return handleResponse(response);
     },
@@ -129,8 +143,8 @@ export const api = {
         return handleResponse(response);
     },
 
-    updateLoanStatus: async (loanId, status) => {
-        const response = await fetch(`${BASE_URL}/loan/admin/manageloan?loanId=${loanId}&status=${status}`, {
+    updateLoanStatus: async (loanId, status, cid) => {
+        const response = await fetch(`${BASE_URL}/loan/admin/manageloan?id=${loanId}&status=${status}&cid=${cid}`, {
             method: 'POST',
             headers: getHeaders(),
         });

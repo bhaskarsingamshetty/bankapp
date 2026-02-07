@@ -26,9 +26,9 @@ const LoanManagement = () => {
         }
     };
 
-    const handleStatusUpdate = async (id, status) => {
+    const handleStatusUpdate = async (id, status,cid) => {
         try {
-            await api.updateLoanStatus(id, status);
+            await api.updateLoanStatus(id, status,cid);
             setLoans(loans.map(loan =>
                 loan.id === id ? { ...loan, status: status } : loan
             ));
@@ -57,13 +57,13 @@ const LoanManagement = () => {
     if (error) return <div className="p-4 text-red-500">{error}</div>;
 
     return (
-        <div style={{ padding: '1.5rem' }}>
+        <div style={{ padding: '1.5rem', minHeight: '100vh', backgroundColor: '#f1f5f9' }}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
                 <h1 style={{ fontSize: '2rem', fontWeight: 'bold', color: 'var(--primary)' }}>
                     Loan Management
                 </h1>
                 <div style={{ display: 'flex', gap: '0.5rem' }}>
-                    {['all', 'pending', 'accepted', 'rejected'].map(f => (
+                    {['all', 'pending', 'approved', 'rejected'].map(f => (
                         <button
                             key={f}
                             onClick={() => setFilter(f)}
@@ -89,41 +89,66 @@ const LoanManagement = () => {
                     </Card>
                 ) : (
                     filteredLoans.map((loan) => (
-                        <Card key={loan.id} style={{ padding: '1.5rem', display: 'flex', justifyContent: 'space-between', alignItems: 'center', flexWrap: 'wrap', gap: '1rem' }}>
+                        <Card key={loan.id} style={{
+                            padding: '1.5rem',
+                            display: 'flex',
+                            justifyContent: 'space-between',
+                            alignItems: 'center',
+                            flexWrap: 'wrap',
+                            gap: '1rem',
+                            backgroundColor: '#ffffff',
+                            transition: 'all 0.2s',
+                            cursor: 'pointer',
+                            hover: { transform: 'translateY(-2px)', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }
+                        }}
+                            onMouseEnter={(e) => {
+                                e.currentTarget.style.transform = 'translateY(-2px)';
+                                e.currentTarget.style.boxShadow = '0 10px 15px -3px rgb(0 0 0 / 0.1)';
+                                e.currentTarget.style.backgroundColor = '#f1f5f9'; // Slate-100 on hover
+                            }}
+                            onMouseLeave={(e) => {
+                                e.currentTarget.style.transform = 'none';
+                                e.currentTarget.style.boxShadow = '0 1px 3px 0 rgb(0 0 0 / 0.1)';
+                                e.currentTarget.style.backgroundColor = '#ffffff';
+                            }}
+                        >
                             <div>
                                 <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', marginBottom: '0.5rem' }}>
                                     <h3 style={{ fontSize: '1.25rem', fontWeight: '600' }}>
                                         {loan.type} Loan
                                     </h3>
-                                    <span style={{
-                                        padding: '0.25rem 0.75rem',
-                                        borderRadius: '9999px',
-                                        fontSize: '0.875rem',
-                                        fontWeight: '500',
-                                        className: getStatusColor(loan.status)
-                                    }}>
+                                    <span
+                                        className={getStatusColor(loan.status)}
+                                        style={{
+                                            padding: '0.25rem 0.75rem',
+                                            borderRadius: '9999px',
+                                            fontSize: '0.875rem',
+                                            fontWeight: '500',
+                                        }}
+                                    >
                                         {loan.status}
                                     </span>
                                 </div>
                                 <div style={{ color: 'var(--text-muted)', fontSize: '0.875rem', display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '0.5rem 2rem' }}>
-                                    <p>Amount: ₹{loan.amount}</p> {/* Assuming using Rupee symbol based on context */}
-                                    <p>Principal: ₹{loan.principalAmount}</p> {/* Assuming principalAmount based on snippet */}
+                                    <p>Customer ID: {loan.cid}</p>
+                                    <p>Amount: ₹{loan.amount}</p>
+                                    <p>Principal: ₹{loan.principalAmount}</p>
                                     <p>Interest Rate: {loan.interestRate}%</p>
                                     <p>Tenure: {loan.tenure} months</p>
-                                    <p>ID: {loan.id}</p>
+                                    <p>Loan ID: {loan.id}</p>
                                 </div>
                             </div>
 
                             {loan.status.toLowerCase() === 'pending' && (
                                 <div style={{ display: 'flex', gap: '1rem' }}>
                                     <Button
-                                        onClick={() => handleStatusUpdate(loan.id, 'accepted')}
+                                        onClick={() => handleStatusUpdate(loan.id, 'approved',loan.cid)}
                                         style={{ backgroundColor: '#16a34a', color: 'white' }}
                                     >
-                                        Accept
+                                        Approve
                                     </Button>
                                     <Button
-                                        onClick={() => handleStatusUpdate(loan.id, 'rejected')}
+                                        onClick={() => handleStatusUpdate(loan.id, 'rejected',loan.cid)}
                                         style={{ backgroundColor: '#dc2626', color: 'white' }}
                                     >
                                         Reject

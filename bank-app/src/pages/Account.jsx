@@ -12,8 +12,8 @@ const Account = () => {
     const navigate = useNavigate();
     // Mock data for existing accounts
     const [accounts, setAccounts] = useState([
-        { id: 1, type: 'Savings Account', accountNumber: '1234567890', balance: 12450.00 },
-        { id: 2, type: 'Checking Account', accountNumber: '0987654321', balance: 500.00 }
+        { id: 1, type: 'Savings Account', accountnumber: '1234567890', balance: 12450.00 },
+        { id: 2, type: 'Checking Account', accountnumber: '0987654321', balance: 500.00 }
     ]);
 
     const [showCreateForm, setShowCreateForm] = useState(false);
@@ -63,6 +63,20 @@ const Account = () => {
         } catch (error) {
             console.error('Error creating account:', error);
             showToast(error.message || 'Error connecting to server.', 'error');
+        }
+    };
+
+    const handleSetDefault = async (accountNumber) => {
+        const userId = localStorage.getItem('userId');
+        if (!userId) return;
+
+        try {
+            await api.setDefaultAccount(userId, accountNumber);
+            await fetchAccounts();
+            showToast('Account set as default successfully!', 'success');
+        } catch (error) {
+            console.error('Error setting default account:', error);
+            showToast(error.message || 'Failed to set default account', 'error');
         }
     };
 
@@ -118,11 +132,24 @@ const Account = () => {
                                 <div>
                                     <h3 className="font-bold text-lg">{account.type}</h3>
                                     <p className="text-muted text-sm">Account : {account.accountnumber}</p>
+                                    {(account.role === 'default') && (
+                                        <p style={{ color: 'green', fontSize: '0.875rem', fontWeight: '500' }}>
+                                            Default
+                                        </p>
+                                    )}
                                 </div>
                             </div>
                             <div className="text-right">
                                 <p className="text-sm text-muted">Available Balance</p>
                                 <h3 className="text-xl font-bold" style={{ color: 'var(--primary)' }}>₹{account.balance.toLocaleString()}</h3>
+                                {account.role !== 'default' && (
+                                    <Button
+                                        onClick={() => handleSetDefault(account.accountnumber)}
+                                        style={{ marginTop: '0.5rem', fontSize: '0.8rem', padding: '0.25rem 0.5rem' }}
+                                    >
+                                        Set as Default
+                                    </Button>
+                                )}
                             </div>
                         </div>
                     </Card>

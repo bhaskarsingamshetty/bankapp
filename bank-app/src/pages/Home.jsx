@@ -22,9 +22,8 @@ const Home = () => {
                 setUserName(name || 'Customer');
 
                 // Fetch accounts and calculate balance
-                const data = await api.getAccounts(userId);
-                const accounts = Array.isArray(data) ? data : (data ? [data] : []);
-                const total = accounts.reduce((sum, acc) => sum + (Number(acc.balance) || 0), 0);
+                const data = await api.getAccountBalance(userId);
+                const total = data.balance;
                 setTotalBalance(total);
 
                 // Fetch transactions
