@@ -3,6 +3,7 @@ import lombok.Data;
 @Data
 public class LoanResponseDTO {
     private Long id;
+    private Long cid;
     private double amount;
     private double principalAmount;
     private double interestRate;

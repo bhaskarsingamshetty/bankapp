@@ -17,7 +17,7 @@ public class Account {
     private Long id;
 
     @Column(nullable=false,unique=true)
-    private String accountnumber;
+    private Long accountnumber;
 
     @ManyToOne
     @JoinColumn(name = "customer_id", nullable = false)
@@ -28,4 +28,6 @@ public class Account {
     
     @Column(nullable = false)
     private String type;
+
+    private String role;
 }

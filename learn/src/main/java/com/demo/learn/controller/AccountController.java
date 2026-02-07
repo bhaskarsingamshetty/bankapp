@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.learn.dto.AccountDto;
+import com.demo.learn.dto.DefaultDto;
 import com.demo.learn.service.AccountService;
 
 @RestController
@@ -27,9 +28,14 @@ public class AccountController {
     public ResponseEntity<?> getaccountinfo(@PathVariable Long id){
         return service.getaccountinfo(id);
     }
+    @PostMapping("/setdefault")
+    public ResponseEntity<?> setdefault(@RequestBody DefaultDto defaultDto){
+        System.out.print(defaultDto.getAccid());
+        return service.setdefault(defaultDto.getId(),defaultDto.getAccid());
+    }
 
     @GetMapping("/balance/{id}")
-    public ResponseEntity<?> getbalance(@PathVariable Long id){
+    public ResponseEntity<?> balance(@PathVariable Long id){
         return service.getbalance(id);
     }
 }

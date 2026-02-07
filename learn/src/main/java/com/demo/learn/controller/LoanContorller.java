@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.demo.learn.dto.Loandto;
@@ -29,11 +30,13 @@ public class LoanContorller {
     }
     @GetMapping("admin/getloans")
     public ResponseEntity<?> getallloans(){
-        return service.getallloans();
+        return service.getloans();
     }
     @PostMapping("admin/manageloan")
-    public ResponseEntity<?> manageloan(long id,String status){
-        return service.manageloan(id,status);
+    public ResponseEntity<?> manageloan(@RequestParam Long id,
+        @RequestParam String status,
+        @RequestParam(required = false) Long cid){
+        return service.manageloan(id,status,cid);
     }
     
 }

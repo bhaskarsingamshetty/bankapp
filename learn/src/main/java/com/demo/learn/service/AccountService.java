@@ -31,21 +31,43 @@ public class AccountService {
        while (num == 0 || repo.existsByAccountnumber(num)) {
             num = (long) (Math.random() * 10000000000L); 
         }
-        a.setAccountnumber(Long.toString(num));
+        a.setAccountnumber(num);
         repo.save(a);
         return ResponseEntity.ok(Map.of("Account created successfully",num));
-    }
-    public ResponseEntity<?> getbalance(Long id) {
-        Account data = repo.findByAccountnumber(id);
-        if(data.getAccountnumber()!=null)
-        return ResponseEntity.ok(Map.of("Balance",data.getBalance()));
-        
-        return ResponseEntity.status(404).body(new ErrorResponse("NO Account present to fetch Balance"));
     }
     public ResponseEntity<?> getaccountinfo(Long id) {
         List<Account> data = repo.findByCustomer_Id(id);
         if(data.isEmpty())return ResponseEntity.status(404).body(new ErrorResponse("no Accounts present , Create account"));
         return ResponseEntity.ok(data);
+    }
+    public ResponseEntity<?> setdefault(Long id, Long accno) {
+        Long accid = repo.findDefaultAccountId(id,"default").orElse(null);
+        if(accid==null){
+            Account data = repo.findByAccountnumber(accno);
+            data.setRole("default");
+            repo.save(data);
+            return ResponseEntity.ok(Map.of("message","updated default account"));
+        }
+        else{
+            Account oldDefault = repo.findById(accid).orElse(null);
+            oldDefault.setRole(null);
+            System.out.println(accno);
+            Account newDefault = repo.findByAccountnumber(accno);
+            System.out.println(newDefault);
+            newDefault.setRole("default");
+            repo.save(oldDefault);
+            repo.save(newDefault);
+            return ResponseEntity.ok(Map.of("message","updated default ccount"));
+        }
+    }
+    public ResponseEntity<?> getbalance(Long id) {
+        Long num = repo.findDefaultAccountId(id,"default").orElse(null);
+        System.out.print("blance :"+num);
+        if(num==null){
+            return ResponseEntity.status(300).body(new ErrorResponse("no value found"));
+        }
+        Account balance = repo.findById(num).orElse(null);
+        return ResponseEntity.ok().body(Map.of("balance",balance.getBalance()));
     }
 
 }
