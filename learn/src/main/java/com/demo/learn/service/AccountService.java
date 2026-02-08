@@ -32,6 +32,9 @@ public class AccountService {
             num = (long) (Math.random() * 10000000000L); 
         }
         a.setAccountnumber(num);
+        if(repo.findByCustomer_Id(id)==null){
+            a.setRole("default");
+        }
         repo.save(a);
         return ResponseEntity.ok(Map.of("Account created successfully",num));
     }
